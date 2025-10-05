@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Flashcards</title>
+</head>
+<style>
+*{
+    padding:0;
+    box-sizing:border-box;
+}
+
+body {
+  animation: rotate-bg-color 10s infinite;
+  display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    background-color: #c7f9cc;
+    
+}
+.main{
+    height:80vh;
+    width:50vw;
+}
+.main .sec{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:row;
+    gap:20px;
+    background-color:#57cc99;
+
+    height:20%;
+    
+}
+.main .sec button{
+    background-color:#80ed99;
+    color:rgb(14, 14, 14);
+    border:none;
+    height:30%;
+    padding:10px;
+    text-align: center;
+    font-weight:500;
+}
+.main .first{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background-color:#22577a;
+    height:70%;
+    perspective:1000;
+}
+.main .first .flashcard {
+    position:relative;
+background-color:white;
+height:50%;
+width:55%;
+transform-style: preserve-3d;
+
+}
+.front,.back{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    backface-visibility: hidden;
+    background-color:#38a3a5;
+   border:1px solid grey; 
+   height:100%;
+   width:100%;  
+}
+.main .first .flashcard .front{
+position:absolute;
+
+}
+.main .first .flashcard .back{
+position:absolute;
+transform: rotateY(180deg);
+background-color: #57cc99;
+}
+.flashcard.flipped{
+    transform: rotateY(180deg);
+    transition: transform 0.6s;
+}
+
+
+.knowAndDont .div4know{
+display: flex;
+justify-content: end;
+align-items:end;
+background-color: #57cc99;
+font-size: medium;
+ color:#22577a;
+ font-weight: bold;
+ 
+}
+.knowAndDont .div4dont{
+    margin-top: 10px;
+    display: flex;
+justify-content: end;
+align-items:end;
+background-color: #57cc99;
+font-size: medium;
+ color:#22577a;
+ font-weight: bold;
+ 
+}
+.reset{
+    background-color:#80ed99;
+    color:rgb(14, 14, 14);
+    border:none;
+    margin-top: 10px;
+margin-bottom: 10px;
+    padding:10px;
+    text-align: center;
+    font-weight:500;
+}
+</style>
+<body>
+<h1>Math Flashcards</h1> 
+<div class="main">
+    <div class="knowAndDont">
+        <div class="div4know"></div>
+        <div class="div4dont"></div>
+    </div>
+    <button class="reset">Reset</button>
+    <div class="first">
+        <div class="flashcard">
+        <div class="front"></div>
+        <div class="back"></div>
+        </div>
+    </div>
+    <div class="sec">
+        <button class="prev" >Previous</button>
+        <button class="next">Next</button>
+        <button class="flip">Flip</button>
+        <button class="know">I know this</button>
+        <button class="dont">I don't know this</button>
+    </div>
+
+</div>
+
+<script>
+    let front=document.getElementsByClassName("front")[0];
+    let back=document.getElementsByClassName("back")[0];
+    let prev=document.getElementsByClassName("prev")[0];
+    let next=document.getElementsByClassName("next")[0];
+    let know=document.getElementsByClassName("know")[0];
+    let dont=document.getElementsByClassName("dont")[0];
+let flip=document.getElementsByClassName("flip")[0];
+let flashcard=document.getElementsByClassName("flashcard")[0];
+let p=document.getElementsByClassName("div4know")[0];
+let k=document.getElementsByClassName("div4dont")[0];
+let reset=document.getElementsByClassName("reset")[0];
+
+    let knowCount=0;
+    let dontCount=0;
+    let idCount=0;
+
+
+    let mathflashcards=[
+        {
+    id:1,
+            question:"What is 888/10 as a decimal",
+            answer:"88.8"
+        },
+        {
+            id:2,
+            question:"How many sides does a triangle have",
+            answer:"3"
+        },
+        {
+            id:3,
+            question:"12 divided 3",
+            answer:"4"
+        },
+        {
+            id:4,
+            question:"5 plus 3",
+            answer:"8"
+        },
+        {
+            id:5,
+            question:"10 minus 6",
+            answer:"4"
+        },
+        {
+            id:6,
+            question:"333 times 8",
+            answer:"2664"
+        }
+    ]
+function loadcard(id){
+        let card= mathflashcards.find(c => c.id ===id);
+        if(card){
+            front.textContent=card.question;
+            back.textContent=card.answer;
+            flashcard.classList.remove("flipped");
+        }}
+    next.addEventListener("click",()=>{
+      idCount++;
+      if(idCount >= mathflashcards.length){
+        idCount=1;
+      }
+      loadcard(idCount);
+    }) 
+    prev.addEventListener("click",()=>{
+     
+     if(idCount-1 === 0){
+        idCount = mathflashcards.length;
+     }
+     idCount--;
+     loadcard(idCount);
+    })
+    know.addEventListener("click",()=>{
+     knowCount++;
+     if(knowCount>mathflashcards.length){
+        knowCount=0;
+     }
+     p.innerHTML=`This is the number of cards you know: ${knowCount}`;
+    })
+
+    dont.addEventListener("click",()=>{
+     dontCount++;
+     if(dontCount>mathflashcards.length){
+        dontCount=0;
+     }
+     k.innerHTML=`This is the number of cards you don't know:${dontCount}`;
+    })
+    flip.addEventListener("click",()=>{
+        flashcard.classList.toggle("flipped");
+    })
+    reset.addEventListener("click",()=>{
+        dontCount=0;
+        knowCount=0;
+       /* p.innerHTML=(`This is the number of cards you know: ${knowCount}`);
+        k.innerHTML=`This is the number of cards you don't know:${dontCount}`;*/
+        p.innerHTML="";
+        k.innerHTML="";
+
+    })
+
+
+</script>
+
+</body>
+</html>
